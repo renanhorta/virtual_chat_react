@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "react-router-dom"
 
 export default function UserForm(){
     return(
@@ -14,6 +15,7 @@ export default function UserForm(){
             <input type="text" />
             <button onClick={console.log("enviado")}>Cadastrar</button>
         </form>
+        <Link to={"/usuarios"}>Lista de usuários</Link>
         </>
     )
 }
