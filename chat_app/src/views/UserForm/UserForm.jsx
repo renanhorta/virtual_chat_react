@@ -10,6 +10,8 @@ export default function UserForm(){
             <input type="email" />
             <label htmlFor="form">idade</label>
             <input type="number" />
+            <label htmlFor="form">foto</label>
+            <input type="text" />
             <button onClick={console.log("enviado")}>Cadastrar</button>
         </form>
         </>
