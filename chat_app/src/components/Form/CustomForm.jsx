@@ -17,6 +17,7 @@ export default function CustomUserForm() {
   const [age, setAge] = useState(0);
   const [photoUrl, setPhotoUrl] = useState("");
   const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState(""); // Show a message when the profile is saved
 
   const validateName = (name) => {
     // This regex checks that the name contains only letters (including accented characters, like é/ç/ã and others) and spaces.
@@ -88,11 +89,19 @@ export default function CustomUserForm() {
     };
 
     setItem(newProfile);
-    //console.log("Dados enviados:", { name, email, age, photoUrl });
     // simulate a back-end comunication
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    //console.log("Enviado!");
     setIsPending(false);
+
+    // show success message
+    setSuccessMessage("Perfil cadastrado!");
+    setTimeout(() => setSuccessMessage(""), 2000);
+
+    // clear the form fields
+    setName("");
+    setEmail("");
+    setAge(0);
+    setPhotoUrl("");
   };
 
   return (
@@ -102,6 +111,7 @@ export default function CustomUserForm() {
         <input
           type="text"
           name="name"
+          value={name}
           required
           onChange={(e) => setName(e.target.value)}
         />
@@ -114,6 +124,7 @@ export default function CustomUserForm() {
         <input
           type="email"
           name="email"
+          value={email}
           required
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -125,6 +136,7 @@ export default function CustomUserForm() {
         <input
           type="number"
           name="age"
+          value={age}
           required
           min={0}
           max={120}
@@ -138,11 +150,14 @@ export default function CustomUserForm() {
         <input
           type="url"
           name="photoUrl"
+          value={photoUrl}
           onChange={(e) => setPhotoUrl(e.target.value)}
         />
       </label>
 
       <Submit isPending={isPending} />
+      {/* show success message */}
+      {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
     </form>
   );
 }
