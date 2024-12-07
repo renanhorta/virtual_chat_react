@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import UserForm from "../UserForm/UserForm";
 import UsersList from "../UsersList/UsersList";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 const FAKEDATA = [
   {
@@ -42,27 +43,18 @@ const FAKEDATA = [
 const FAKEEMPTYDATA = [];
 
 export default function Home() {
-  const [profile, setProfile] = useState([]);
-  const [islogged, setIslogged] = useState(false);
+  const [profiles, setProfiles] = useState([]);
+  const { getItem } = useLocalStorage("Profiles");
 
-  function handleLog() {
-    setIslogged(!islogged);
-  }
+  useEffect(() => {
+    // get the value in the localStorage with the "Profiles" key
+    const storedProfiles = getItem();
+    if (storedProfiles) {
+      setProfiles(storedProfiles);
+    }
+  }, [getItem]);
+
   return (
-    <>
-      {islogged ? (
-        <div>
-          Div se não tem gente cadastrada
-          <button onClick={handleLog}>mudar log</button>
-          <UsersList />
-        </div>
-      ) : (
-        <div>
-          DIV se tem gente cadastrada
-          <button onClick={handleLog}>mudar log</button>
-          <UserForm />
-        </div>
-      )}
-    </>
+    <>{!profiles || profiles.length == 0 ? <UserForm /> : <UsersList />}</>
   );
 }
