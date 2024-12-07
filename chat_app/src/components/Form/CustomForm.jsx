@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 function Submit({ isPending }) {
   return (
@@ -56,6 +57,9 @@ export default function CustomUserForm() {
     event.preventDefault();
     setIsPending(true);
 
+    // use the custom hook to set a new item in the localStorage
+    const { setItem } = useLocalStorage("Profiles");
+
     // check the inputs fields and valitade the values.
     const nameError = validateName(name);
     const emailError = validateEmail(email);
@@ -74,13 +78,20 @@ export default function CustomUserForm() {
     }
     // if all the errors is Null the setErros will be a empty object to follow the submition.
     setErrors({});
+    // create a new profile, with the forms inputs, to be saved in the localStorage
+    const newProfile = {
+      id: new Date().getTime(),
+      name: name,
+      image: photoUrl,
+      email: email,
+      age: age,
+    };
 
-    console.log("Dados enviados:", { name, email, age, photoUrl });
-
-    // simulação do enviio pro banco de dados.
+    setItem(newProfile);
+    //console.log("Dados enviados:", { name, email, age, photoUrl });
+    // simulate a back-end comunication
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    console.log("Enviado!");
-
+    //console.log("Enviado!");
     setIsPending(false);
   };
 
