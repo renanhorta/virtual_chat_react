@@ -14,7 +14,7 @@ export default function CustomUserForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [age, setAge] = useState(0);
-  const [url, setUrl] = useState("");
+  const [photoUrl, setPhotoUrl] = useState("");
   const [errors, setErrors] = useState({});
 
   const validateName = (name) => {
@@ -56,12 +56,6 @@ export default function CustomUserForm() {
     event.preventDefault();
     setIsPending(true);
 
-    const formData = new FormData(event.target);
-    const name = formData.get("name");
-    const email = formData.get("email");
-    const age = formData.get("age");
-    const photoUrl = formData.get("photoUrl");
-
     // check the inputs fields and valitade the values.
     const nameError = validateName(name);
     const emailError = validateEmail(email);
@@ -97,7 +91,7 @@ export default function CustomUserForm() {
         <input
           type="text"
           name="name"
-          required="true"
+          required
           onChange={(e) => setName(e.target.value)}
         />
         {/* checks if the errors string is not empty, if it is True. an red error message will be rendered below the field */}
@@ -109,7 +103,7 @@ export default function CustomUserForm() {
         <input
           type="email"
           name="email"
-          required="true"
+          required
           onChange={(e) => setEmail(e.target.value)}
         />
         {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
@@ -120,7 +114,9 @@ export default function CustomUserForm() {
         <input
           type="number"
           name="age"
-          required="true"
+          required
+          min={0}
+          max={120}
           onChange={(e) => setAge(e.target.value)}
         />
         {errors.age && <p style={{ color: "red" }}>{errors.age}</p>}
@@ -131,7 +127,7 @@ export default function CustomUserForm() {
         <input
           type="url"
           name="photoUrl"
-          onChange={(e) => setUrl(e.target.value)}
+          onChange={(e) => setPhotoUrl(e.target.value)}
         />
       </label>
 
