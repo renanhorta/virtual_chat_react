@@ -8,14 +8,18 @@ export default function UserForm() {
   const [profiles, setProfiles] = useState([]);
 
   useEffect(() => {
-    // get the value in the localStorage with the "Profiles" key
+    // check if are some data in the localStorage
     const storedProfiles = getItem();
-    console.log(storedProfiles);
-
     if (storedProfiles) {
       setProfiles(storedProfiles);
     }
-  }, [getItem]);
+  }, []);
+
+  useEffect(() => {
+    if (profiles.length > 0) {
+      setProfiles(profiles);
+    }
+  }, [profiles]);
 
   return (
     <div>

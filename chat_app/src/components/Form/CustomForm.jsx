@@ -79,13 +79,15 @@ export default function CustomUserForm() {
     }
     // if all the errors is Null the setErros will be a empty object to follow the submition.
     setErrors({});
-    // create a new profile, with the forms inputs, to be saved in the localStorage
+
+    // create a new profile, with the forms inputs and a empty msg array, to be saved in the localStorage
     const newProfile = {
       id: new Date().getTime(),
       name: name,
       image: photoUrl,
       email: email,
       age: age,
+      messages: [],
     };
 
     setItem(newProfile);

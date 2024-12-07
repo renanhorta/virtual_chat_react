@@ -2,14 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 
-// const MOCKLIST = [{
-//     id:new Date().getTime()+1,
-//     name:"fulano",
-//     image:"",
-//     email:"fulano@gmail.com",
-//     age: 20,
-// }, }]
-
 export default function UsersList() {
   // get the profile inthe localStorage, with the custom hook.
   const { getItem } = useLocalStorage("Profiles");
@@ -18,12 +10,10 @@ export default function UsersList() {
   useEffect(() => {
     // get the value in the localStorage with the "Profiles" key
     const storedProfiles = getItem();
-    console.log(storedProfiles);
-
     if (storedProfiles) {
       setProfiles(storedProfiles);
     }
-  }, [getItem]);
+  }, []);
 
   return (
     <div>
@@ -35,7 +25,6 @@ export default function UsersList() {
       <ul>
         {profiles?.map((user) => (
           <li key={user.id}>
-            <Link to={`/chat`}></Link>
             <Link to={`/chat/${user.id}`}>
               <p>Nome: {user.name}</p>
               <p>idade: {user.age}</p>
