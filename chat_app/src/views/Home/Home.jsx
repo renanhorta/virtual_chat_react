@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import UserForm from "../UserForm/UserForm";
 import UsersList from "../UsersList/UsersList";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
+import styles from "./Home.module.css";
 
 export default function Home() {
   const [profiles, setProfiles] = useState([]);
@@ -16,6 +17,8 @@ export default function Home() {
   }, []);
 
   return (
-    <>{!profiles || profiles.length == 0 ? <UserForm /> : <UsersList />}</>
+    <div className={styles.container}>
+      {!profiles || profiles.length == 0 ? <UserForm /> : <UsersList />}
+    </div>
   );
 }

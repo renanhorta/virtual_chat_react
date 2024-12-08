@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import CustomUserForm from "../../components/Form/CustomForm";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
+import styles from "./UserForm.module.css";
 
 export default function UserForm() {
   const { getItem } = useLocalStorage("Profiles");
@@ -22,10 +23,11 @@ export default function UserForm() {
   }, [profiles]);
 
   return (
-    <div>
-      {/* Renderizar o link a seguir caso tenha algum perfil no localStorage */}
+    <div className={styles.container}>
       {profiles.length != 0 && (
-        <Link to={"/usuarios"}>Voltar a lista de usuários</Link>
+        <Link to={"/usuarios"} className={styles.link}>
+          Voltar a lista de usuários
+        </Link>
       )}
       <CustomUserForm />
     </div>

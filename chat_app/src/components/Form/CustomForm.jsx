@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
+import styles from "./CustomForm.module.css";
 
 function Submit({ isPending }) {
   return (
@@ -107,8 +108,8 @@ export default function CustomUserForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="name">
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <label htmlFor="name" className={styles.label}>
         Nome*
         <input
           type="text"
@@ -116,12 +117,13 @@ export default function CustomUserForm() {
           value={name}
           required
           onChange={(e) => setName(e.target.value)}
+          className={styles.input}
         />
         {/* checks if the errors string is not empty, if it is True. an red error message will be rendered below the field */}
-        {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
+        {errors.name && <p className={styles.error}>{errors.name}</p>}
       </label>
 
-      <label htmlFor="email">
+      <label htmlFor="email" className={styles.label}>
         Email
         <input
           type="email"
@@ -129,11 +131,12 @@ export default function CustomUserForm() {
           value={email}
           required
           onChange={(e) => setEmail(e.target.value)}
+          className={styles.input}
         />
-        {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
+        {errors.email && <p className={styles.error}>{errors.email}</p>}
       </label>
 
-      <label htmlFor="age">
+      <label htmlFor="age" className={styles.label}>
         Idade
         <input
           type="number"
@@ -143,23 +146,25 @@ export default function CustomUserForm() {
           min={0}
           max={120}
           onChange={(e) => setAge(e.target.value)}
+          className={styles.input}
         />
-        {errors.age && <p style={{ color: "red" }}>{errors.age}</p>}
+        {errors.age && <p className={styles.error}>{errors.age}</p>}
       </label>
 
-      <label htmlFor="photoUrl">
+      <label htmlFor="photoUrl" className={styles.label}>
         Foto
         <input
           type="url"
           name="photoUrl"
           value={photoUrl}
           onChange={(e) => setPhotoUrl(e.target.value)}
+          className={styles.input}
         />
       </label>
 
       <Submit isPending={isPending} />
       {/* show success message */}
-      {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+      {successMessage && <p className={styles.success}>{successMessage}</p>}
     </form>
   );
 }
