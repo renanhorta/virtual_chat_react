@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 
@@ -6,8 +6,13 @@ export default function Chat() {
   const params = useParams();
   const userID = params.userId;
   const { getProfile, updateProfile } = useLocalStorage("Profile");
-  const user = getProfile(userID);
+  const [user, setUser] = useState(null);
   const [messageContent, setMessageContent] = useState("");
+
+  useEffect(() => {
+    const fetchedUser = getProfile(userID);
+    setUser(fetchedUser);
+  }, [userID]);
 
   if (!user) {
     return (
@@ -18,9 +23,23 @@ export default function Chat() {
     );
   }
 
-  const updatedUser = {
-    ...user,
-    messages: [...(user.message || []), newMessage],
+  const handleSendMessage = (event) => {
+    event.preventDefault();
+
+    // new object msg to be added in the user profile.
+    const newMessage = {
+      date: new Date().toISOString(),
+      content: messageContent,
+    };
+
+    // adding the new msg in the messages props of the object
+    const updatedUser = {
+      ...user,
+      messages: [...(user.messages || []), newMessage],
+    };
+    updateProfile(userID, updatedUser);
+    setUser(updatedUser);
+    setMessageContent("");
   };
 
   return (
@@ -35,13 +54,22 @@ export default function Chat() {
       <div>
         <h2>Chat</h2>
         <ul>
-          {user.messages?.map((message) => (
-            <li>{message.content}</li>
+          {user.messages?.map((message, index) => (
+            <li key={index}>
+              <strong>{new Date(message.date).toLocaleString()}:</strong>{" "}
+              {message.content}
+            </li>
           ))}
         </ul>
-        <form>
+        <form onSubmit={handleSendMessage}>
           <label>Digite sua mensagem</label>
-          <input></input>
+          <input
+            type="text"
+            value={messageContent}
+            onChange={(e) => setMessageContent(e.target.value)} // Atualizar o estado
+            required
+          />
+          <button type="submit">Enviar</button>
         </form>
       </div>
     </div>
