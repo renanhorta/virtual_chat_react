@@ -73,6 +73,8 @@
   padding: 12px;
   margin: 0;
   list-style: none;
+  display: flex;
+  flex-direction: column;
 }
 
 .form {
@@ -123,4 +125,24 @@
   align-items: flex-start;
   font-size: 1.5rem;
 
+}
+.userMessageBox,.messageBox{
+  max-width: 600px;
+  border-radius: 8px;
+  margin: 8px;
+  padding: 8px;
+  border: 1px solid black;
+}
+
+.userMessageBox{
+  background-color: #87e1e1;
+  color: black;
+  align-self: flex-end;
+
+}
+
+.messageBox{
+  background-color: #69ac7c;
+  color: black;
+  align-self: flex-start;
 }

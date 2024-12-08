@@ -64,6 +64,38 @@ export default function Chat() {
     setMessageContent("");
   };
 
+  const formatMessageTime = (dateTime) => {
+    /**
+     * this function shows the “dateTime” depending on the day you are viewing the message.
+     * if it is the same day, it will only show the hour and minutes, if it is not the same day it will show the full date
+     * and time.
+     */
+    const messageDate = new Date(dateTime);
+    const today = new Date();
+
+    const isSameDay =
+      messageDate.getDate() === today.getDate() &&
+      messageDate.getMonth() === today.getMonth() &&
+      messageDate.getFullYear() === today.getFullYear();
+
+    const time = messageDate.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    if (isSameDay) {
+      return time; // Show in the format HH:MM
+    }
+
+    const date = messageDate.toLocaleDateString([], {
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+    });
+
+    return `${date} : ${time}`; // Show in the format DD/MM/AA : HH:MM
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.leftPanel}>
@@ -85,14 +117,23 @@ export default function Chat() {
       <div className={styles.chat}>
         <h2 className={styles.title}>Chat</h2>
         <ul className={styles.messageList}>
-          {messages.map((message, index) => (
-            <li key={index} className={styles.messageBox}>
-              <strong>
-                [{new Date(message.time).toLocaleString()}] {message.author}:
-              </strong>
-              {message.content}
-            </li>
-          ))}
+          {messages.map((message, index) =>
+            message.author === user.name ? (
+              <li key={index} className={styles.userMessageBox}>
+                <small>{formatMessageTime(message.time)}:</small>
+                <br></br>
+                {message.content}
+              </li>
+            ) : (
+              <li key={index} className={styles.messageBox}>
+                <small>
+                  {formatMessageTime(message.time)} {message.author}:
+                </small>
+                <br></br>
+                {message.content}
+              </li>
+            )
+          )}
         </ul>
         <form onSubmit={handleSendMessage} className={styles.form}>
           <label>Digite sua mensagem</label>
