@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useCallback } from "react";
 
 export const useLocalStorage = (key) => {
   const setItem = useCallback(
@@ -54,10 +54,13 @@ export const useLocalStorage = (key) => {
   );
 
   const updateProfile = useCallback(
+    // change some information about a selected Profile in the localstorage
     (id, updatedProfile) => {
+      console.log(updatedProfile);
       try {
         const storedProfiles =
           JSON.parse(window.localStorage.getItem(key)) || [];
+        console.log(storedProfiles);
         const updatedProfiles = storedProfiles.map((profile) =>
           String(profile.id) === String(id) ? updatedProfile : profile
         );

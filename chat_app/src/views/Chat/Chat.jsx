@@ -5,7 +5,7 @@ import { useLocalStorage } from "../../hooks/useLocalStorage";
 export default function Chat() {
   const params = useParams();
   const userID = params.userId;
-  const { getProfile, updateProfile } = useLocalStorage("Profile");
+  const { getProfile, updateProfile } = useLocalStorage("Profiles");
   const [user, setUser] = useState(null);
   const [messageContent, setMessageContent] = useState("");
 
