@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
+import styles from "./CustomForm.module.css";
 
 function Submit({ isPending }) {
   return (
@@ -11,6 +12,7 @@ function Submit({ isPending }) {
 
 export default function CustomUserForm() {
   /** component responsible for registering new profiles in the application's localstorage. */
+  /** component responsible for registering new profiles in the application's localstorage. */
   const [isPending, setIsPending] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -18,6 +20,9 @@ export default function CustomUserForm() {
   const [photoUrl, setPhotoUrl] = useState("");
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState(""); // Show a message when the profile is saved
+
+  // use the custom hook to manage profiles in localStorage
+  const { setItem } = useLocalStorage("Profiles");
 
   // use the custom hook to manage profiles in localStorage
   const { setItem } = useLocalStorage("Profiles");
@@ -38,11 +43,13 @@ export default function CustomUserForm() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return "Insira um email válido.";
+      return "Insira um email válido.";
     }
     return null;
   };
 
   const validateAge = (age) => {
+    // The age must be greater than 0
     // The age must be greater than 0
     if (age <= 0) {
       return "A idade deve ser maior que zero.";
@@ -53,20 +60,25 @@ export default function CustomUserForm() {
   const handleSubmit = async (event) => {
     /**
      * This function controls the submission of the form.
+     * This function controls the submission of the form.
      * First, the function prevents the standard submit event from working, after which it makes a switch in the “isPending”
      * state to simulate sending information to a back-end and takes all the values from the form inputs and validates each one
      * independently.
+     * If they are all validated, the form saves the form values in a “profile” object in localStorage in the “Profiles” field.
+     *
      * If they are all validated, the form saves the form values in a “profile” object in localStorage in the “Profiles” field.
      */
     event.preventDefault();
     setIsPending(true);
 
     // Validate inputs fields and capture error messages
+    // Validate inputs fields and capture error messages
     const nameError = validateName(name);
     const emailError = validateEmail(email);
     const ageError = validateAge(Number(age));
 
     if (nameError || emailError || ageError) {
+      // If any error exists, update the errors object and stop the submission process
       // If any error exists, update the errors object and stop the submission process
       setErrors({
         name: nameError,
@@ -78,8 +90,11 @@ export default function CustomUserForm() {
     }
 
     // If no errors, clear the errors object
+
+    // If no errors, clear the errors object
     setErrors({});
 
+    // Create a new profile object to be saved in the localStorage
     // Create a new profile object to be saved in the localStorage
     const newProfile = {
       id: new Date().getTime(),
@@ -93,23 +108,27 @@ export default function CustomUserForm() {
     setItem(newProfile); // Save the new profile in the localStorag
 
     // Simulate a back-end communication delay
+    setItem(newProfile); // Save the new profile in the localStorag
+
+    // Simulate a back-end communication delay
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsPending(false);
 
     // Show success message
+    // Show success message
     setSuccessMessage("Perfil cadastrado!");
     setTimeout(() => setSuccessMessage(""), 2000);
 
+    // Clear the form fields
     // Clear the form fields
     setName("");
     setEmail("");
     setAge(0);
     setPhotoUrl("");
   };
-
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="name">
+    <form onSubmit={handleSubmit} className={styles.CustomForm}>
+      <label htmlFor="name" className={styles.label}>
         Nome*
         <input
           type="text"
@@ -117,12 +136,13 @@ export default function CustomUserForm() {
           value={name}
           required
           onChange={(e) => setName(e.target.value)}
+          className={styles.input}
         />
-        {/* Checks if the errors string is not empty, and renders a red error message below the field */}
-        {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
+        {/* checks if the errors string is not empty, if it is True. an red error message will be rendered below the field */}
+        {errors.name && <p className={styles.error}>{errors.name}</p>}
       </label>
 
-      <label htmlFor="email">
+      <label htmlFor="email" className={styles.label}>
         Email
         <input
           type="email"
@@ -130,11 +150,12 @@ export default function CustomUserForm() {
           value={email}
           required
           onChange={(e) => setEmail(e.target.value)}
+          className={styles.input}
         />
-        {errors.email && <p style={{ color: "red" }}>{errors.email}</p>}
+        {errors.email && <p className={styles.error}>{errors.email}</p>}
       </label>
 
-      <label htmlFor="age">
+      <label htmlFor="age" className={styles.label}>
         Idade
         <input
           type="number"
@@ -144,23 +165,25 @@ export default function CustomUserForm() {
           min={0}
           max={120}
           onChange={(e) => setAge(e.target.value)}
+          className={styles.input}
         />
-        {errors.age && <p style={{ color: "red" }}>{errors.age}</p>}
+        {errors.age && <p className={styles.error}>{errors.age}</p>}
       </label>
 
-      <label htmlFor="photoUrl">
+      <label htmlFor="photoUrl" className={styles.label}>
         Foto
         <input
           type="url"
           name="photoUrl"
           value={photoUrl}
           onChange={(e) => setPhotoUrl(e.target.value)}
+          className={styles.input}
         />
       </label>
 
       <Submit isPending={isPending} />
-      {/* Show success message */}
-      {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+      {/* show success message */}
+      {successMessage && <p className={styles.success}>{successMessage}</p>}
     </form>
   );
 }
