@@ -65,7 +65,7 @@ export default function CustomUserForm() {
      * state to simulate sending information to a back-end and takes all the values from the form inputs and validates each one
      * independently.
      * If they are all validated, the form saves the form values in a “profile” object in localStorage in the “Profiles” field.
-     */
+     *
      * If they are all validated, the form saves the form values in a “profile” object in localStorage in the “Profiles” field.
      */
     event.preventDefault();
