@@ -108,7 +108,7 @@ export default function CustomUserForm() {
     setPhotoUrl("");
   };
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form onSubmit={handleSubmit} className={styles.CustomForm}>
       <label htmlFor="name" className={styles.label}>
         Nome*
         <input

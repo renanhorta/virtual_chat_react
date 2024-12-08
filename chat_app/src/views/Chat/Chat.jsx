@@ -4,6 +4,8 @@ import { useLocalStorage } from "../../hooks/useLocalStorage";
 import styles from "./Chat.module.css";
 
 export default function Chat() {
+  /**this component renders the selected user fields, the messages in the localStorage chat and the registered profiles,
+   *  at the end there is a form that serves to send a message to the localStorage chat. */
   const params = useParams();
   const userID = params.userId;
   const { getProfile, updateProfile } = useLocalStorage("Profiles");
@@ -12,9 +14,11 @@ export default function Chat() {
   const [messageContent, setMessageContent] = useState("");
 
   useEffect(() => {
-    const fetchedUser = getProfile(userID);
+    //It loads all the data from the selected profile and selects all the profiles that are stored in the localStorage.
+    // The Hook is called every time the userID changes, every time the url “users:/userID” changes.
+    const selectedUser = getProfile(userID);
     const profiles = JSON.parse(localStorage.getItem("Profiles")) || [];
-    setUser(fetchedUser);
+    setUser(selectedUser);
     setAllProfiles(profiles.filter((profile) => profile.id !== userID));
   }, [userID]);
 
@@ -49,6 +53,7 @@ export default function Chat() {
   return (
     <div className={styles.container}>
       <div className={styles.leftPanel}>
+        <Link to={"/usuarios"}>Lista de usuários</Link>
         <img src={user.image} alt={user.name} className={styles.profileImage} />
         <h3>{user.name}</h3>
         <p>Email: {user.email}</p>
@@ -56,7 +61,7 @@ export default function Chat() {
       </div>
 
       <div className={styles.chat}>
-        <h2>Chat</h2>
+        <h2 className={styles.title}>Chat</h2>
         <ul className={styles.messageList}>
           {user.messages?.map((message, index) => (
             <li key={index}>
