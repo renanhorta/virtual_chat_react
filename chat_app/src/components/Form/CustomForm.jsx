@@ -24,9 +24,6 @@ export default function CustomUserForm() {
   // use the custom hook to manage profiles in localStorage
   const { setItem } = useLocalStorage("Profiles");
 
-  // use the custom hook to manage profiles in localStorage
-  const { setItem } = useLocalStorage("Profiles");
-
   const validateName = (name) => {
     // This regex checks that the name contains only letters (including accented characters, like é/ç/ã and others) and spaces.
     if (!/^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/.test(name)) {
