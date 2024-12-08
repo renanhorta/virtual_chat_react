@@ -8,16 +8,19 @@ export default function Chat() {
   const userID = params.userId;
   const { getProfile, updateProfile } = useLocalStorage("Profiles");
   const [user, setUser] = useState(null);
+  const [allProfiles, setAllProfiles] = useState([]);
   const [messageContent, setMessageContent] = useState("");
 
   useEffect(() => {
     const fetchedUser = getProfile(userID);
+    const profiles = JSON.parse(localStorage.getItem("Profiles")) || [];
     setUser(fetchedUser);
+    setAllProfiles(profiles.filter((profile) => profile.id !== userID));
   }, [userID]);
 
   if (!user) {
     return (
-      <div style={styles.container}>
+      <div className={styles.container}>
         <h2>Perfil não existente.</h2>
         <Link to={"/"}>Voltar para home</Link>
       </div>
@@ -44,16 +47,17 @@ export default function Chat() {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.profile}>
+    <div className={styles.container}>
+      <div className={styles.leftPanel}>
+        <img src={user.image} alt={user.name} className={styles.profileImage} />
         <h3>{user.name}</h3>
-        <p>email:{user.email}</p>
-        <p>idade: {user.age}</p>
-        <img src={user.image} alt="" />
+        <p>Email: {user.email}</p>
+        <p>Idade: {user.age}</p>
       </div>
-      <div style={styles.chat}>
+
+      <div className={styles.chat}>
         <h2>Chat</h2>
-        <ul style={styles.messageList}>
+        <ul className={styles.messageList}>
           {user.messages?.map((message, index) => (
             <li key={index}>
               <strong>{new Date(message.date).toLocaleString()}:</strong>{" "}
@@ -61,19 +65,33 @@ export default function Chat() {
             </li>
           ))}
         </ul>
-        <form onSubmit={handleSendMessage}>
+        <form onSubmit={handleSendMessage} className={styles.form}>
           <label>Digite sua mensagem</label>
           <input
             type="text"
             value={messageContent}
             onChange={(e) => setMessageContent(e.target.value)}
-            style={styles.input}
+            className={styles.input}
             required
           />
-          <button type="submit" style={styles.button}>
+          <button type="submit" className={styles.button}>
             Enviar
           </button>
         </form>
+      </div>
+
+      <div className={styles.rightPanel}>
+        <h3>Usuários Disponíveis</h3>
+        {allProfiles.map((profile) => (
+          <div key={profile.id} className={styles.userCard}>
+            <img
+              src={profile.image}
+              alt={profile.name}
+              className={styles.userImage}
+            />
+            <p>{profile.name}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
