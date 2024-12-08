@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { useChatLocalStorage } from "../../hooks/useChatLocalStorage";
 import styles from "./Chat.module.css";
 
 export default function Chat() {
@@ -9,8 +10,10 @@ export default function Chat() {
   const params = useParams();
   const userID = params.userId;
   const { getProfile, updateProfile } = useLocalStorage("Profiles");
+  const { addMessage, getMessages } = useChatLocalStorage("chatMessages");
   const [user, setUser] = useState(null);
   const [allProfiles, setAllProfiles] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [messageContent, setMessageContent] = useState("");
 
   useEffect(() => {
@@ -20,7 +23,10 @@ export default function Chat() {
     const profiles = JSON.parse(localStorage.getItem("Profiles")) || [];
     setUser(selectedUser);
     setAllProfiles(profiles.filter((profile) => profile.id !== userID));
-  }, [userID]);
+
+    // load the chat with all the messages in the localStorage.
+    setMessages(getMessages());
+  }, [userID, getMessages]);
 
   if (!user) {
     return (
@@ -33,20 +39,28 @@ export default function Chat() {
 
   const handleSendMessage = (event) => {
     event.preventDefault();
+    // Check if the messageContent is valid to save in the localStorage
+    if (
+      !messageContent ||
+      !messageContent.trim() ||
+      messageContent.length === 0
+    ) {
+      console.log("não pode enviar menssagem vazia");
+      return;
+    }
 
     // new object msg to be added in the user profile.
     const newMessage = {
-      date: new Date().toISOString(),
+      author: user.name,
       content: messageContent,
     };
 
     // adding the new msg in the messages props of the object
-    const updatedUser = {
-      ...user,
-      messages: [...(user.messages || []), newMessage],
-    };
-    updateProfile(userID, updatedUser);
-    setUser(updatedUser);
+    addMessage(newMessage);
+    setMessages((prev) => [
+      ...prev,
+      { ...newMessage, time: new Date().toISOString() },
+    ]);
     setMessageContent("");
   };
 
@@ -54,7 +68,15 @@ export default function Chat() {
     <div className={styles.container}>
       <div className={styles.leftPanel}>
         <Link to={"/usuarios"}>Lista de usuários</Link>
-        <img src={user.image} alt={user.name} className={styles.profileImage} />
+        {user.image ? (
+          <img
+            src={user.image}
+            alt={user.name}
+            className={styles.profileImage}
+          />
+        ) : (
+          <p className={styles.noProfileImage}>{user.name[0]}</p>
+        )}
         <h3>{user.name}</h3>
         <p>Email: {user.email}</p>
         <p>Idade: {user.age}</p>
@@ -63,9 +85,11 @@ export default function Chat() {
       <div className={styles.chat}>
         <h2 className={styles.title}>Chat</h2>
         <ul className={styles.messageList}>
-          {user.messages?.map((message, index) => (
-            <li key={index}>
-              <strong>{new Date(message.date).toLocaleString()}:</strong>{" "}
+          {messages.map((message, index) => (
+            <li key={index} className={styles.messageBox}>
+              <strong>
+                [{new Date(message.time).toLocaleString()}] {message.author}:
+              </strong>
               {message.content}
             </li>
           ))}
@@ -89,11 +113,15 @@ export default function Chat() {
         <h3>Usuários Disponíveis</h3>
         {allProfiles.map((profile) => (
           <div key={profile.id} className={styles.userCard}>
-            <img
-              src={profile.image}
-              alt={profile.name}
-              className={styles.userImage}
-            />
+            {profile.image ? (
+              <img
+                src={profile.image}
+                alt={profile.name}
+                className={styles.userImage}
+              />
+            ) : (
+              <p className={styles.noImageUser}>{profile.name[0]}</p>
+            )}
             <p>{profile.name}</p>
           </div>
         ))}
