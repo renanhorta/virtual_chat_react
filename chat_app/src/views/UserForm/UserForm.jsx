@@ -14,13 +14,7 @@ export default function UserForm() {
     if (storedProfiles) {
       setProfiles(storedProfiles);
     }
-  }, []);
-
-  useEffect(() => {
-    if (profiles.length > 0) {
-      setProfiles(profiles);
-    }
-  }, [profiles]);
+  }, [getItem]);
 
   return (
     <div className={styles.container}>

@@ -28,6 +28,24 @@ export default function Chat() {
     setMessages(getMessages());
   }, [userID, getMessages]);
 
+  useEffect(() => {
+    /**
+     * this hook takes handle changes to the localStorage in the “chatMessages” key. Each time chatMessages changes,
+     *  setMessages is called, updating the messages in real time. The eventListiner is created so that all tabs hear the
+     *  change in the LocalStorage, so that everyone updates their components and not just the person who sent the message.
+     *  */
+    const handleStorageChange = (event) => {
+      if (event.key === "chatMessages") {
+        setMessages(getMessages());
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, [getMessages]);
+
   if (!user) {
     return (
       <div className={styles.container}>

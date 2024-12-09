@@ -102,8 +102,6 @@ export default function CustomUserForm() {
       messages: [],
     };
 
-    setItem(newProfile); // Save the new profile in the localStorag
-
     // Simulate a back-end communication delay
     setItem(newProfile); // Save the new profile in the localStorag
 
