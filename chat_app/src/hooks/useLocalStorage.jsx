@@ -53,6 +53,27 @@ export const useLocalStorage = (key) => {
     [key]
   );
 
+  const getProfileByName = useCallback(
+    (profileName) => {
+      //Return a selected item in the list in LocalStorage
+      try {
+        const storedList =
+          JSON.parse(window.localStorage.getItem("Profiles")) || [];
+
+        const filteredProfile = storedList.filter(
+          (profile) => String(profile.name) === String(profileName)
+        );
+
+        // return the frist item with the same ID or undefined
+        return filteredProfile.length > 0 ? filteredProfile[0] : undefined;
+      } catch (error) {
+        console.log(error);
+        return undefined;
+      }
+    },
+    [key]
+  );
+
   const updateProfile = useCallback(
     // change some information about a selected Profile in the localstorage
     (id, updatedProfile) => {
@@ -81,5 +102,12 @@ export const useLocalStorage = (key) => {
     }
   };
 
-  return { setItem, getItem, getProfile, updateProfile, removeItem };
+  return {
+    setItem,
+    getItem,
+    getProfile,
+    getProfileByName,
+    updateProfile,
+    removeItem,
+  };
 };
