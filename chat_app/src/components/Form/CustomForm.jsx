@@ -12,7 +12,6 @@ function Submit({ isPending }) {
 
 export default function CustomUserForm() {
   /** component responsible for registering new profiles in the application's localstorage. */
-  /** component responsible for registering new profiles in the application's localstorage. */
   const [isPending, setIsPending] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -47,7 +46,6 @@ export default function CustomUserForm() {
 
   const validateAge = (age) => {
     // The age must be greater than 0
-    // The age must be greater than 0
     if (age <= 0) {
       return "A idade deve ser maior que zero.";
     }
@@ -57,25 +55,21 @@ export default function CustomUserForm() {
   const handleSubmit = async (event) => {
     /**
      * This function controls the submission of the form.
-     * This function controls the submission of the form.
      * First, the function prevents the standard submit event from working, after which it makes a switch in the “isPending”
      * state to simulate sending information to a back-end and takes all the values from the form inputs and validates each one
      * independently.
      * If they are all validated, the form saves the form values in a “profile” object in localStorage in the “Profiles” field.
      *
-     * If they are all validated, the form saves the form values in a “profile” object in localStorage in the “Profiles” field.
      */
     event.preventDefault();
     setIsPending(true);
 
-    // Validate inputs fields and capture error messages
     // Validate inputs fields and capture error messages
     const nameError = validateName(name);
     const emailError = validateEmail(email);
     const ageError = validateAge(Number(age));
 
     if (nameError || emailError || ageError) {
-      // If any error exists, update the errors object and stop the submission process
       // If any error exists, update the errors object and stop the submission process
       setErrors({
         name: nameError,
@@ -88,10 +82,8 @@ export default function CustomUserForm() {
 
     // If no errors, clear the errors object
 
-    // If no errors, clear the errors object
     setErrors({});
 
-    // Create a new profile object to be saved in the localStorage
     // Create a new profile object to be saved in the localStorage
     const newProfile = {
       id: new Date().getTime(),
@@ -110,11 +102,9 @@ export default function CustomUserForm() {
     setIsPending(false);
 
     // Show success message
-    // Show success message
     setSuccessMessage("Perfil cadastrado!");
     setTimeout(() => setSuccessMessage(""), 2000);
 
-    // Clear the form fields
     // Clear the form fields
     setName("");
     setEmail("");
