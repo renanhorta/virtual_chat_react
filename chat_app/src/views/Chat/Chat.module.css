@@ -6,14 +6,24 @@
   height: 100%;
   width: 100%;
 }
-
-.leftPanel,
-.rightPanel {
-  width: 10%;
-  text-align: center;
+.userPanel{
+display: flex;
+flex-direction: column;
+gap: 8px;
+width: 100%;
+margin-left: 12px;
 }
 
+.userInfo{
+  display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+  }
+
+
 .leftPanel{
+  width: 15%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,9 +32,11 @@
   padding-top: 12px;
 }
 .rightPanel{
+  width: 100%;
+  margin-left: 12px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   padding-top: 12px;
 }
@@ -39,7 +51,6 @@
   height: 80px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 1rem;
 }
 
 .noProfileImage{

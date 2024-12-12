@@ -122,19 +122,44 @@ export default function Chat() {
   return (
     <div className={styles.container}>
       <div className={styles.leftPanel}>
-        <Link to={"/usuarios"}>Lista de usuários</Link>
-        {user.image ? (
-          <img
-            src={user.image}
-            alt={user.name}
-            className={styles.profileImage}
-          />
-        ) : (
-          <p className={styles.noProfileImage}>{user.name[0]}</p>
-        )}
-        <h3>{user.name}</h3>
-        <p>Email: {user.email}</p>
-        <p>Idade: {user.age}</p>
+        <div className={styles.userPanel}>
+          <Link to={"/usuarios"}>Lista de usuários</Link>
+          <div className={styles.userInfo}>
+            {user.image ? (
+              <img
+                src={user.image}
+                alt={user.name}
+                className={styles.profileImage}
+              />
+            ) : (
+              <p className={styles.noProfileImage}>{user.name[0]}</p>
+            )}
+            <h3>{user.name}</h3>
+          </div>
+          <p>
+            <strong>Email:</strong> {user.email}
+          </p>
+          <p>
+            <strong>Idade:</strong> {user.age}
+          </p>
+        </div>
+        <div className={styles.rightPanel}>
+          <h3>Usuários Disponíveis</h3>
+          {allProfiles.map((profile) => (
+            <div key={profile.id} className={styles.userCard}>
+              {profile.image ? (
+                <img
+                  src={profile.image}
+                  alt={profile.name}
+                  className={styles.userImage}
+                />
+              ) : (
+                <p className={styles.noImageUser}>{profile.name[0]}</p>
+              )}
+              <p>{profile.name}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className={styles.chat}>
@@ -189,24 +214,6 @@ export default function Chat() {
             Enviar
           </button>
         </form>
-      </div>
-
-      <div className={styles.rightPanel}>
-        <h3>Usuários Disponíveis</h3>
-        {allProfiles.map((profile) => (
-          <div key={profile.id} className={styles.userCard}>
-            {profile.image ? (
-              <img
-                src={profile.image}
-                alt={profile.name}
-                className={styles.userImage}
-              />
-            ) : (
-              <p className={styles.noImageUser}>{profile.name[0]}</p>
-            )}
-            <p>{profile.name}</p>
-          </div>
-        ))}
       </div>
     </div>
   );
