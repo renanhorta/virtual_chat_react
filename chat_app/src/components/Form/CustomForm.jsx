@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import styles from "./CustomForm.module.css";
+import { useNavigate } from "react-router-dom";
 
 function Submit({ isPending }) {
   return (
@@ -12,6 +13,7 @@ function Submit({ isPending }) {
 
 export default function CustomUserForm() {
   /** component responsible for registering new profiles in the application's localstorage. */
+  const navigate = useNavigate();
   const [isPending, setIsPending] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -103,7 +105,11 @@ export default function CustomUserForm() {
 
     // Show success message
     setSuccessMessage("Perfil cadastrado!");
-    setTimeout(() => setSuccessMessage(""), 2000);
+    setTimeout(() => {
+      setSuccessMessage("");
+      //send to the UserList route
+      navigate("/usuarios");
+    }, 2000);
 
     // Clear the form fields
     setName("");
