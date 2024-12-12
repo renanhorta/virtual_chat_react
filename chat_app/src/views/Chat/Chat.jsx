@@ -9,7 +9,7 @@ export default function Chat() {
    *  at the end there is a form that serves to send a message to the localStorage chat. */
   const params = useParams();
   const userID = params.userId;
-  const { getProfile, updateProfile } = useLocalStorage("Profiles");
+  const { getProfile, getProfileByName } = useLocalStorage("Profiles");
   const { addMessage, getMessages } = useChatLocalStorage("chatMessages");
   const [user, setUser] = useState(null);
   const [allProfiles, setAllProfiles] = useState([]);
@@ -114,6 +114,11 @@ export default function Chat() {
     return `${date} : ${time}`; // Show in the format DD/MM/AA : HH:MM
   };
 
+  const getProfileByMessageAuthor = (author) => {
+    const filteredProfile = getProfileByName(author);
+    console.log(filteredProfile);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.leftPanel}>
@@ -135,23 +140,41 @@ export default function Chat() {
       <div className={styles.chat}>
         <h2 className={styles.title}>Chat</h2>
         <ul className={styles.messageList}>
-          {messages.map((message, index) =>
-            message.author === user.name ? (
+          {messages.map((message, index) => {
+            // get the object profile of the message author
+            const authorProfile = getProfileByName(message.author);
+            const authorImage = authorProfile?.image; // get the Image of the message author
+            const authorInitial = message.author[0]; // get the frist letter of the message
+
+            return message.author === user.name ? (
               <li key={index} className={styles.userMessageBox}>
-                <small>{formatMessageTime(message.time)}:</small>
-                <br></br>
-                {message.content}
+                <div className={styles.messageAuthor}>
+                  {user.image ? (
+                    <img src={user.image} alt={user.name} />
+                  ) : (
+                    <p>{user.name[0]}</p>
+                  )}
+                  <small>{formatMessageTime(message.time)}</small>
+                </div>
+                <div>{message.content}</div>
               </li>
             ) : (
               <li key={index} className={styles.messageBox}>
-                <small>
-                  {formatMessageTime(message.time)} {message.author}:
-                </small>
-                <br></br>
+                <div className={styles.messageAuthor}>
+                  {authorImage ? (
+                    <img src={authorImage} alt={message.author} />
+                  ) : (
+                    <p>{authorInitial}</p>
+                  )}
+                  <small>
+                    {formatMessageTime(message.time)} {message.author}:
+                  </small>
+                </div>
+                <br />
                 {message.content}
               </li>
-            )
-          )}
+            );
+          })}
         </ul>
         <form onSubmit={handleSendMessage} className={styles.form}>
           <label>Digite sua mensagem</label>
